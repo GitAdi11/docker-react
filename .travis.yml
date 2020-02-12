@@ -1,11 +1,13 @@
+language: generic
 sudo: required
 services:
     - docker
 before_install:
     - docker build -t adiabbadi/docker-react -f Dockerfile.dev .
 script:
-    - docker run adiabbadi/docker-react npm run test -- --coverage
+    - docker run -e CI=true adiabbadi/docker-react npm run test -- --coverage
 deploy:
+    edge: true
     provider: elasticbeanstalk
     region: "us-east-2"
     app: "docker-react"
@@ -16,4 +18,4 @@ deploy:
         branch: master
 access_key_id: $Aws-Access-Key
 secret_access_key:
-    secure: "$Aws-Secret-Key"
+    secure: $Aws-Secret-Key
